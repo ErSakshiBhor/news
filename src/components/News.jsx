@@ -103,25 +103,35 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 const News = (props) => {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [page, setPage] = useState(1);
   const [totalResults, setTotalResults] = useState(0);
 
   const updateNews = async () => {
     props.setProgress(10);
     setLoading(true);
+    setError(null);
 
-    let url = `/api/news?country=${props.country}&category=${props.category}&page=${page}&pageSize=${props.pageSize}`;
+    const url = `/api/news?country=${props.country}&category=${props.category}&page=${page}&pageSize=${props.pageSize}`;
 
-    let data = await fetch(url);
-    props.setProgress(30);
+    try {
+      const response = await fetch(url);
+      props.setProgress(30);
+      const parsedData = await response.json();
+      props.setProgress(70);
 
-    let parsedData = await data.json();
-    props.setProgress(70);
+      if (!response.ok) {
+        throw new Error(parsedData.message || parsedData.error || 'Failed to load news');
+      }
 
-    setArticles(parsedData.articles || []);
-    setTotalResults(parsedData.totalResults || 0);
-    setLoading(false);
-    props.setProgress(100);
+      setArticles(parsedData.articles || []);
+      setTotalResults(parsedData.totalResults || 0);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+      props.setProgress(100);
+    }
   };
 
   useEffect(() => {
@@ -133,13 +143,18 @@ const News = (props) => {
     let nextPage = page + 1;
     setPage(nextPage);
 
-    let url = `/api/news?country=${props.country}&category=${props.category}&page=${nextPage + 1}&pageSize=${props.pageSize}`;
+    const url = `/api/news?country=${props.country}&category=${props.category}&page=${nextPage}&pageSize=${props.pageSize}`;
 
-    let data = await fetch(url);
-    let parsedData = await data.json();
+    const response = await fetch(url);
+    const parsedData = await response.json();
 
-    setArticles((prevArticles) => prevArticles.concat(parsedData.articles));
-    setTotalResults(parsedData.totalResults);
+    if (!response.ok) {
+      setError(parsedData.message || parsedData.error || 'Failed to load more news');
+      return;
+    }
+
+    setArticles((prevArticles) => prevArticles.concat(parsedData.articles || []));
+    setTotalResults(parsedData.totalResults || 0);
   };
 
   return (
@@ -148,16 +163,23 @@ const News = (props) => {
 
       {loading && <Spinner />} {/* Show spinner while loading */}
 
-      <InfiniteScroll
-        dataLength={articles.length}
-        next={fetchMoreData}
-        hasMore={articles.length !== totalResults}
-        loader={<Spinner />}
-      >
-        <div className="container">
-          <div className="row">
-            {articles.map((element) => (
-              <div className="col-md-4" key={element.url}>
+      {error && (
+        <div className="alert alert-danger" role="alert">
+          {error}
+        </div>
+      )}
+
+      {!loading && !error && (
+        <InfiniteScroll
+          dataLength={articles.length}
+          next={fetchMoreData}
+          hasMore={articles.length !== totalResults}
+          loader={<Spinner />}
+        >
+          <div className="container">
+            <div className="row">
+              {articles.map((element) => (
+                <div className="col-md-4" key={element.url}>
                 <NewsItem
                   title={element.title ? element.title.slice(0, 45) : ""}
                   description={element.description ? element.description.slice(0, 67) : "No description available."}
@@ -171,6 +193,7 @@ const News = (props) => {
           </div>
         </div>
       </InfiniteScroll>
+      )}
     </div>
   );
 };
