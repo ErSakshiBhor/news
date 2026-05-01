@@ -110,10 +110,7 @@ const News = (props) => {
     props.setProgress(10);
     setLoading(true);
 
-    // Update the API key to be fetched from environment variables
-    const apiKey = import.meta.env.VITE_NEWS_API_KEY;
-
-    let url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${apiKey}&page=${page}&pageSize=${props.pageSize}`;
+    let url = `/api/news?country=${props.country}&category=${props.category}&page=${page}&pageSize=${props.pageSize}`;
 
     let data = await fetch(url);
     props.setProgress(30);
@@ -136,9 +133,7 @@ const News = (props) => {
     let nextPage = page + 1;
     setPage(nextPage);
 
-    const apiKey = import.meta.env.VITE_NEWS_API_KEY;
-
-    let url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${apiKey}&page=${nextPage + 1}&pageSize=${props.pageSize}`;
+    let url = `/api/news?country=${props.country}&category=${props.category}&page=${nextPage + 1}&pageSize=${props.pageSize}`;
 
     let data = await fetch(url);
     let parsedData = await data.json();
