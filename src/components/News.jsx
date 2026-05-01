@@ -111,7 +111,7 @@ const News = (props) => {
     setLoading(true);
 
     // Update the API key to be fetched from environment variables
-    const apiKey = process.env.REACT_APP_NEWS_API_KEY;
+    const apiKey = import.meta.env.VITE_NEWS_API_KEY;
 
     let url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${apiKey}&page=${page}&pageSize=${props.pageSize}`;
 
@@ -136,7 +136,7 @@ const News = (props) => {
     let nextPage = page + 1;
     setPage(nextPage);
 
-    const apiKey = process.env.REACT_APP_NEWS_API_KEY;
+    const apiKey = import.meta.env.VITE_NEWS_API_KEY;
 
     let url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${apiKey}&page=${nextPage + 1}&pageSize=${props.pageSize}`;
 
