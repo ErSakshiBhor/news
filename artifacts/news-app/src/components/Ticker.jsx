@@ -1,7 +1,7 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTheme } from '../hooks/useTheme';
 
-const Ticker = () => {
+const Ticker = ({ country = 'us' }) => {
   const [headlines, setHeadlines] = useState([]);
   const [paused, setPaused] = useState(false);
   const { isDark } = useTheme();
@@ -9,7 +9,7 @@ const Ticker = () => {
   useEffect(() => {
     const fetchHeadlines = async () => {
       try {
-        const res = await fetch('/api/news?country=us&category=general&page=1&pageSize=20');
+        const res = await fetch(`/api/news?country=${country}&category=general&page=1&pageSize=20`);
         const data = await res.json();
         if (data.articles) {
           setHeadlines(data.articles.map(a => a.title).filter(Boolean));
@@ -19,7 +19,7 @@ const Ticker = () => {
       }
     };
     fetchHeadlines();
-  }, []);
+  }, [country]);
 
   if (headlines.length === 0) return null;
 
@@ -44,44 +44,37 @@ const Ticker = () => {
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
-      {/* BREAKING label */}
-      <div
-        style={{
-          flexShrink: 0,
-          background: '#dc3545',
-          color: '#fff',
-          fontSize: '0.7rem',
-          fontWeight: 700,
-          letterSpacing: '0.08em',
-          padding: '0 12px',
-          height: '100%',
-          display: 'flex',
-          alignItems: 'center',
-          textTransform: 'uppercase',
-          whiteSpace: 'nowrap',
-          zIndex: 1,
-          boxShadow: '4px 0 8px rgba(0,0,0,0.3)',
-        }}
-      >
+      <div style={{
+        flexShrink: 0,
+        background: '#dc3545',
+        color: '#fff',
+        fontSize: '0.7rem',
+        fontWeight: 700,
+        letterSpacing: '0.08em',
+        padding: '0 12px',
+        height: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        textTransform: 'uppercase',
+        whiteSpace: 'nowrap',
+        zIndex: 1,
+        boxShadow: '4px 0 8px rgba(0,0,0,0.3)',
+      }}>
         Breaking
       </div>
 
-      {/* Scrolling track */}
       <div style={{ flex: 1, overflow: 'hidden', height: '100%', position: 'relative' }}>
-        <div
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            height: '100%',
-            whiteSpace: 'nowrap',
-            animation: `ticker-scroll 90s linear infinite`,
-            animationPlayState: paused ? 'paused' : 'running',
-            color: '#e4e6eb',
-            fontSize: '0.8rem',
-            gap: '0',
-            paddingLeft: '24px',
-          }}
-        >
+        <div style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          height: '100%',
+          whiteSpace: 'nowrap',
+          animation: `ticker-scroll 90s linear infinite`,
+          animationPlayState: paused ? 'paused' : 'running',
+          color: '#e4e6eb',
+          fontSize: '0.8rem',
+          paddingLeft: '24px',
+        }}>
           <span>{tickerText}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{tickerText}</span>
         </div>
       </div>

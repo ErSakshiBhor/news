@@ -3,6 +3,7 @@ import NewsItem from './NewsItem';
 import Spinner from './Spinner';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useBookmarks } from '../hooks/useBookmarks';
+import { COUNTRIES } from '../hooks/useCountry';
 
 const News = (props) => {
   const [articles, setArticles] = useState([]);
@@ -11,6 +12,8 @@ const News = (props) => {
   const [page, setPage] = useState(1);
   const [totalResults, setTotalResults] = useState(0);
   const { isBookmarked, toggleBookmark } = useBookmarks();
+
+  const countryName = COUNTRIES.find(c => c.code === props.country)?.name || props.country.toUpperCase();
 
   const updateNews = async () => {
     props.setProgress(10);
@@ -42,14 +45,13 @@ const News = (props) => {
   useEffect(() => {
     updateNews();
     // eslint-disable-next-line
-  }, [props.category]);
+  }, [props.category, props.country]);
 
   const fetchMoreData = async () => {
     const nextPage = page + 1;
     setPage(nextPage);
 
     const url = `/api/news?country=${props.country}&category=${props.category}&page=${nextPage}&pageSize=${props.pageSize}`;
-
     const response = await fetch(url);
     const parsedData = await response.json();
 
@@ -58,15 +60,20 @@ const News = (props) => {
       return;
     }
 
-    setArticles((prevArticles) => prevArticles.concat(parsedData.articles || []));
+    setArticles(prev => prev.concat(parsedData.articles || []));
     setTotalResults(parsedData.totalResults || 0);
   };
+
+  const categoryLabel = props.category.charAt(0).toUpperCase() + props.category.slice(1);
 
   return (
     <div className='container my-3'>
       <h1 className="text-center" style={{ margin: '35px 0px', marginTop: '110px' }}>
-        QuickNews — Top {props.category} Headlines
+        Top {categoryLabel} Headlines
       </h1>
+      <p className="text-center text-muted mb-4" style={{ marginTop: '-12px' }}>
+        {countryName}
+      </p>
 
       {loading && <Spinner />}
 
@@ -85,17 +92,13 @@ const News = (props) => {
           next={fetchMoreData}
           hasMore={articles.length < totalResults}
           loader={<Spinner />}
-          endMessage={
-            <p style={{ textAlign: 'center' }}>
-              <b>You've seen all the news!</b>
-            </p>
-          }
+          endMessage={<p style={{ textAlign: 'center' }}><b>You've seen all the news!</b></p>}
         >
           <div className="container">
             <div className="row">
               {articles.length === 0 ? (
                 <div className="col-12 text-center my-5">
-                  <p>No articles found for this category.</p>
+                  <p>No articles found for this category in {countryName}.</p>
                 </div>
               ) : (
                 articles.map((element) => (
