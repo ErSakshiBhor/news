@@ -47,6 +47,7 @@ newsRouter.get("/news", async (req, res) => {
       return;
     }
 
+    res.set("Cache-Control", "no-store");
     res.status(200).json(data);
   } catch (err) {
     req.log.error({ err }, "Failed to fetch news");
@@ -79,6 +80,7 @@ newsRouter.get("/news/search", async (req, res) => {
       return;
     }
 
+    res.set("Cache-Control", "no-store");
     res.status(200).json(data);
   } catch (err) {
     req.log.error({ err }, "Failed to search news");
