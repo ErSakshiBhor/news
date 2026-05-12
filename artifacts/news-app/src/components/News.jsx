@@ -64,8 +64,8 @@ const News = (props) => {
 
   return (
     <div className='container my-3'>
-      <h1 className="text-center" style={{ margin: '35px 0px', marginTop: '90px' }}>
-        NewsMonkey - Top {props.category} Headlines
+      <h1 className="text-center" style={{ margin: '35px 0px', marginTop: '110px' }}>
+        QuickNews — Top {props.category} Headlines
       </h1>
 
       {loading && <Spinner />}
@@ -73,9 +73,9 @@ const News = (props) => {
       {error && (
         <div className="alert alert-danger" role="alert">
           <strong>Error:</strong> {error}
-          {error.includes('apiKey') || error.includes('API') ? (
-            <p className="mt-2 mb-0">Please make sure the <code>NEWS_API_KEY</code> environment variable is set.</p>
-          ) : null}
+          {(error.includes('apiKey') || error.includes('API')) && (
+            <p className="mt-2 mb-0">Make sure <code>NEWS_API_KEY</code> is set.</p>
+          )}
         </div>
       )}
 
@@ -87,7 +87,7 @@ const News = (props) => {
           loader={<Spinner />}
           endMessage={
             <p style={{ textAlign: 'center' }}>
-              <b>You have seen all the news!</b>
+              <b>You've seen all the news!</b>
             </p>
           }
         >

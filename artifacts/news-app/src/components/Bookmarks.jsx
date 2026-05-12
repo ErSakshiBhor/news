@@ -3,11 +3,11 @@ import NewsItem from './NewsItem';
 import { useBookmarks } from '../hooks/useBookmarks';
 
 const Bookmarks = () => {
-  const { bookmarks, removeBookmark, isBookmarked, toggleBookmark } = useBookmarks();
+  const { bookmarks, isBookmarked, toggleBookmark } = useBookmarks();
 
   return (
     <div className="container my-3">
-      <h1 className="text-center" style={{ margin: '35px 0px', marginTop: '90px' }}>
+      <h1 className="text-center" style={{ margin: '35px 0px', marginTop: '110px' }}>
         Saved Articles
       </h1>
 

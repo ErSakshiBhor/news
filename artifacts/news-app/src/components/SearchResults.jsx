@@ -37,7 +37,7 @@ const SearchResults = ({ setProgress }) => {
         throw new Error(data.error || data.message || 'Search failed');
       }
 
-      setArticles(prev => reset || pageNum === 1 ? (data.articles || []) : [...prev, ...(data.articles || [])]);
+      setArticles(prev => (reset || pageNum === 1) ? (data.articles || []) : [...prev, ...(data.articles || [])]);
       setTotalResults(data.totalResults || 0);
     } catch (err) {
       setError(err.message);
@@ -62,9 +62,9 @@ const SearchResults = ({ setProgress }) => {
   };
 
   return (
-    <div className="container my-3" style={{ marginTop: '90px' }}>
-      <h1 className="text-center" style={{ margin: '35px 0px', marginTop: '90px' }}>
-        {query ? `Search results for "${query}"` : 'Search News'}
+    <div className="container my-3">
+      <h1 className="text-center" style={{ margin: '35px 0px', marginTop: '110px' }}>
+        {query ? `Results for "${query}"` : 'Search QuickNews'}
       </h1>
 
       {loading && <Spinner />}
@@ -92,11 +92,7 @@ const SearchResults = ({ setProgress }) => {
             next={fetchMoreData}
             hasMore={articles.length < totalResults}
             loader={<Spinner />}
-            endMessage={
-              <p style={{ textAlign: 'center' }}>
-                <b>You have seen all the results!</b>
-              </p>
-            }
+            endMessage={<p style={{ textAlign: 'center' }}><b>You've seen all the results!</b></p>}
           >
             <div className="row">
               {articles.map((element, index) => (

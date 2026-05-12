@@ -4,6 +4,7 @@ import NavBar from './components/NavBar';
 import News from './components/News';
 import SearchResults from './components/SearchResults';
 import Bookmarks from './components/Bookmarks';
+import Ticker from './components/Ticker';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LoadingBar from "react-top-loading-bar";
 
@@ -15,6 +16,7 @@ const App = () => {
     <div>
       <Router>
         <NavBar />
+        <Ticker />
         <LoadingBar
           height={3}
           color="#f11946"
