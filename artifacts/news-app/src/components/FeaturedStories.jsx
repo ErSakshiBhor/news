@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { useTheme } from '../hooks/useTheme';
 import { useBookmarks } from '../hooks/useBookmarks';
+import { ReadingTimeBadge } from '../utils/readingTime.jsx';
 
 const placeholderImage = 'https://placehold.co/800x450?text=No+Image+Available';
 
-const ShareBtn = ({ url, title }) => {
+const ShareBtn = ({ url, title, size = '' }) => {
   const [label, setLabel] = useState('🔗 Share');
   const handle = async () => {
     if (navigator.share) {
@@ -16,7 +17,7 @@ const ShareBtn = ({ url, title }) => {
     }
   };
   return (
-    <button onClick={handle} className="btn btn-outline-secondary btn-sm" style={{ minWidth: '90px' }}>
+    <button onClick={handle} className={`btn btn-outline-secondary btn-${size || 'sm'}`} style={{ minWidth: '90px' }}>
       {label}
     </button>
   );
@@ -64,12 +65,13 @@ const HeroCard = ({ article, isBookmarked, onToggleBookmark }) => {
             <p className="card-text flex-grow-1 text-muted">
               {article.description ? article.description.slice(0, 160) + '...' : 'No description available.'}
             </p>
-            <p className="card-text mb-3">
+            <div className="d-flex align-items-center justify-content-between mb-2">
               <small className="text-muted">
                 By {article.author || 'Unknown'} · {article.publishedAt ? new Date(article.publishedAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : ''}
               </small>
-            </p>
-            <div className="d-flex gap-2">
+              <ReadingTimeBadge article={article} />
+            </div>
+            <div className="d-flex gap-2 mt-2">
               <a href={article.url} target="_blank" rel="noreferrer" className="btn btn-dark btn-sm flex-grow-1">Read More</a>
               <ShareBtn url={article.url} title={article.title} />
             </div>
@@ -121,11 +123,12 @@ const MiniCard = ({ article, isBookmarked, onToggleBookmark }) => {
         <p className="card-text text-muted flex-grow-1" style={{ fontSize: '0.83rem' }}>
           {article.description ? article.description.slice(0, 80) + '...' : 'No description.'}
         </p>
-        <p className="card-text mb-2">
+        <div className="d-flex align-items-center justify-content-between mb-2">
           <small className="text-muted" style={{ fontSize: '0.75rem' }}>
             {article.publishedAt ? new Date(article.publishedAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }) : ''}
           </small>
-        </p>
+          <ReadingTimeBadge article={article} />
+        </div>
         <div className="d-flex gap-2">
           <a href={article.url} target="_blank" rel="noreferrer" className="btn btn-dark btn-sm flex-grow-1" style={{ fontSize: '0.8rem' }}>Read More</a>
           <button onClick={handleShare} className="btn btn-outline-secondary btn-sm" style={{ fontSize: '0.8rem', minWidth: '78px' }}>{shareLabel}</button>
