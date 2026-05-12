@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import NewsItem from './NewsItem';
+import FeaturedStories from './FeaturedStories';
 import Spinner from './Spinner';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useBookmarks } from '../hooks/useBookmarks';
@@ -12,12 +13,16 @@ const News = (props) => {
   const [totalResults, setTotalResults] = useState(0);
   const { isBookmarked, toggleBookmark } = useBookmarks();
 
+  const showFeatured = props.featured && articles.length >= 3;
+  const featuredArticles = showFeatured ? articles.slice(0, 3) : [];
+  const gridArticles = showFeatured ? articles.slice(3) : articles;
+
   const updateNews = async () => {
     props.setProgress(10);
     setLoading(true);
     setError(null);
 
-    const url = `/api/news?country=${props.country}&category=${props.category}&page=${page}&pageSize=${props.pageSize}`;
+    const url = `/api/news?country=${props.country}&category=${props.category}&page=1&pageSize=${props.pageSize}`;
 
     try {
       const response = await fetch(url);
@@ -31,6 +36,7 @@ const News = (props) => {
 
       setArticles(parsedData.articles || []);
       setTotalResults(parsedData.totalResults || 0);
+      setPage(1);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -64,7 +70,7 @@ const News = (props) => {
   const categoryLabel = props.category.charAt(0).toUpperCase() + props.category.slice(1);
 
   return (
-    <div className='container my-3'>
+    <div className="container my-3">
       <h1 className="text-center" style={{ margin: '35px 0px', marginTop: '148px' }}>
         Top {categoryLabel} Headlines
       </h1>
@@ -81,38 +87,42 @@ const News = (props) => {
       )}
 
       {!loading && !error && (
-        <InfiniteScroll
-          dataLength={articles.length}
-          next={fetchMoreData}
-          hasMore={articles.length < totalResults}
-          loader={<Spinner />}
-          endMessage={<p style={{ textAlign: 'center' }}><b>You've seen all the news!</b></p>}
-        >
-          <div className="container">
-            <div className="row">
-              {articles.length === 0 ? (
-                <div className="col-12 text-center my-5">
-                  <p>No articles found for this category.</p>
-                </div>
-              ) : (
-                articles.map((element) => (
-                  <div className="col-md-4" key={element.url}>
-                    <NewsItem
-                      title={element.title ? element.title.slice(0, 45) : ""}
-                      description={element.description ? element.description.slice(0, 67) : "No description available."}
-                      imageUrl={element.urlToImage}
-                      newsUrl={element.url}
-                      author={element.author}
-                      date={element.publishedAt}
-                      isBookmarked={isBookmarked(element.url)}
-                      onToggleBookmark={() => toggleBookmark(element)}
-                    />
+        <>
+          {showFeatured && <FeaturedStories articles={featuredArticles} />}
+
+          <InfiniteScroll
+            dataLength={articles.length}
+            next={fetchMoreData}
+            hasMore={articles.length < totalResults}
+            loader={<Spinner />}
+            endMessage={<p style={{ textAlign: 'center' }}><b>You've seen all the news!</b></p>}
+          >
+            <div className="container">
+              <div className="row">
+                {gridArticles.length === 0 && !showFeatured ? (
+                  <div className="col-12 text-center my-5">
+                    <p>No articles found for this category.</p>
                   </div>
-                ))
-              )}
+                ) : (
+                  gridArticles.map((element) => (
+                    <div className="col-md-4" key={element.url}>
+                      <NewsItem
+                        title={element.title ? element.title.slice(0, 45) : ""}
+                        description={element.description ? element.description.slice(0, 67) : "No description available."}
+                        imageUrl={element.urlToImage}
+                        newsUrl={element.url}
+                        author={element.author}
+                        date={element.publishedAt}
+                        isBookmarked={isBookmarked(element.url)}
+                        onToggleBookmark={() => toggleBookmark(element)}
+                      />
+                    </div>
+                  ))
+                )}
+              </div>
             </div>
-          </div>
-        </InfiniteScroll>
+          </InfiniteScroll>
+        </>
       )}
     </div>
   );
@@ -120,8 +130,9 @@ const News = (props) => {
 
 News.defaultProps = {
   country: 'in',
-  pageSize: 8,
-  category: 'general'
+  pageSize: 12,
+  category: 'general',
+  featured: false,
 };
 
 export default News;

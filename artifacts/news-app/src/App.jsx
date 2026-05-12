@@ -23,7 +23,7 @@ const App = () => {
         <CategoryBar />
         <LoadingBar height={3} color="#f11946" progress={progress} />
         <Routes>
-          <Route path="/"              element={<News setProgress={setProgress} key="Home"          pageSize={pageSize} country={COUNTRY} category="general"       />} />
+          <Route path="/"              element={<News setProgress={setProgress} key="Home"          pageSize={pageSize} country={COUNTRY} category="general"       featured={true} />} />
           <Route path="/Science"       element={<News setProgress={setProgress} key="Science"       pageSize={pageSize} country={COUNTRY} category="science"       />} />
           <Route path="/Business"      element={<News setProgress={setProgress} key="Business"      pageSize={pageSize} country={COUNTRY} category="business"      />} />
           <Route path="/Entertainment" element={<News setProgress={setProgress} key="Entertainment" pageSize={pageSize} country={COUNTRY} category="entertainment" />} />
