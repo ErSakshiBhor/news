@@ -63,7 +63,7 @@ const SearchResults = ({ setProgress }) => {
 
   return (
     <div className="container my-3">
-      <h1 className="text-center" style={{ margin: '35px 0px', marginTop: '110px' }}>
+      <h1 className="text-center" style={{ margin: '35px 0px', marginTop: '148px' }}>
         {query ? `Results for "${query}"` : 'Search QuickNews'}
       </h1>
 

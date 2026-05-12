@@ -1,6 +1,7 @@
 import './App.css'
 import React, { useState } from 'react'
 import NavBar from './components/NavBar';
+import CategoryBar from './components/CategoryBar';
 import News from './components/News';
 import SearchResults from './components/SearchResults';
 import Bookmarks from './components/Bookmarks';
@@ -19,6 +20,7 @@ const App = () => {
       <Router>
         <NavBar />
         <Ticker country={COUNTRY} />
+        <CategoryBar />
         <LoadingBar height={3} color="#f11946" progress={progress} />
         <Routes>
           <Route path="/"              element={<News setProgress={setProgress} key="Home"          pageSize={pageSize} country={COUNTRY} category="general"       />} />

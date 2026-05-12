@@ -7,7 +7,7 @@ const Bookmarks = () => {
 
   return (
     <div className="container my-3">
-      <h1 className="text-center" style={{ margin: '35px 0px', marginTop: '110px' }}>
+      <h1 className="text-center" style={{ margin: '35px 0px', marginTop: '148px' }}>
         Saved Articles
       </h1>
 
