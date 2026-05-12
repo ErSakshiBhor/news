@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useBookmarks } from '../hooks/useBookmarks';
+import { useTheme } from '../hooks/useTheme';
 
 const NavBar = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
   const { bookmarks } = useBookmarks();
+  const { isDark, toggleTheme } = useTheme();
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -60,18 +62,28 @@ const NavBar = () => {
                 </li>
               </ul>
 
-              <form className="d-flex" role="search" onSubmit={handleSearch}>
-                <input
-                  className="form-control me-2"
-                  type="search"
-                  placeholder="Search news..."
-                  aria-label="Search"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  style={{ minWidth: '200px' }}
-                />
-                <button className="btn btn-outline-light" type="submit">Search</button>
-              </form>
+              <div className="d-flex align-items-center gap-2">
+                <button
+                  className="theme-toggle"
+                  onClick={toggleTheme}
+                  aria-label="Toggle dark mode"
+                >
+                  {isDark ? '☀️ Light' : '🌙 Dark'}
+                </button>
+
+                <form className="d-flex" role="search" onSubmit={handleSearch}>
+                  <input
+                    className="form-control me-2"
+                    type="search"
+                    placeholder="Search news..."
+                    aria-label="Search"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    style={{ minWidth: '180px' }}
+                  />
+                  <button className="btn btn-outline-light" type="submit">Search</button>
+                </form>
+              </div>
             </div>
           </div>
         </nav>
