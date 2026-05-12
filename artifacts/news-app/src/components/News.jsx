@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import NewsItem from './NewsItem';
 import Spinner from './Spinner';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { useBookmarks } from '../hooks/useBookmarks';
 
 const News = (props) => {
   const [articles, setArticles] = useState([]);
@@ -9,6 +10,7 @@ const News = (props) => {
   const [error, setError] = useState(null);
   const [page, setPage] = useState(1);
   const [totalResults, setTotalResults] = useState(0);
+  const { isBookmarked, toggleBookmark } = useBookmarks();
 
   const updateNews = async () => {
     props.setProgress(10);
@@ -105,6 +107,8 @@ const News = (props) => {
                       newsUrl={element.url}
                       author={element.author}
                       date={element.publishedAt}
+                      isBookmarked={isBookmarked(element.url)}
+                      onToggleBookmark={() => toggleBookmark(element)}
                     />
                   </div>
                 ))

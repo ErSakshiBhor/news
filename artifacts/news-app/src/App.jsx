@@ -3,7 +3,8 @@ import React, { useState } from 'react'
 import NavBar from './components/NavBar';
 import News from './components/News';
 import SearchResults from './components/SearchResults';
-import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
+import Bookmarks from './components/Bookmarks';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LoadingBar from "react-top-loading-bar";
 
 const App = () => {
@@ -28,6 +29,7 @@ const App = () => {
           <Route path="/Health" element={<News setProgress={setProgress} key="Health" pageSize={pageSize} country="us" category="Health" />} />
           <Route path="/Sports" element={<News setProgress={setProgress} key="Sports" pageSize={pageSize} country="us" category="Sports" />} />
           <Route path="/search" element={<SearchResults setProgress={setProgress} />} />
+          <Route path="/bookmarks" element={<Bookmarks />} />
         </Routes>
       </Router>
     </div>

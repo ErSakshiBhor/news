@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { useBookmarks } from '../hooks/useBookmarks';
 
 const NavBar = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
+  const { bookmarks } = useBookmarks();
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -45,6 +47,16 @@ const NavBar = () => {
                 </li>
                 <li className="nav-item">
                   <Link className="nav-link" to="/Entertainment">Entertainment</Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link d-flex align-items-center gap-1" to="/bookmarks">
+                    Saved
+                    {bookmarks.length > 0 && (
+                      <span className="badge rounded-pill bg-danger" style={{ fontSize: '0.65rem' }}>
+                        {bookmarks.length}
+                      </span>
+                    )}
+                  </Link>
                 </li>
               </ul>
 

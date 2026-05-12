@@ -3,10 +3,12 @@ import { useSearchParams } from 'react-router-dom';
 import NewsItem from './NewsItem';
 import Spinner from './Spinner';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { useBookmarks } from '../hooks/useBookmarks';
 
 const SearchResults = ({ setProgress }) => {
   const [searchParams] = useSearchParams();
   const query = searchParams.get('q') || '';
+  const { isBookmarked, toggleBookmark } = useBookmarks();
 
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -106,6 +108,8 @@ const SearchResults = ({ setProgress }) => {
                     newsUrl={element.url}
                     author={element.author}
                     date={element.publishedAt}
+                    isBookmarked={isBookmarked(element.url)}
+                    onToggleBookmark={() => toggleBookmark(element)}
                   />
                 </div>
               ))}
