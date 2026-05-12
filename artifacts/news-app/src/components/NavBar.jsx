@@ -1,7 +1,19 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 
 const NavBar = () => {
+  const [searchQuery, setSearchQuery] = useState('');
+  const navigate = useNavigate();
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    const q = searchQuery.trim();
+    if (q) {
+      navigate(`/search?q=${encodeURIComponent(q)}`);
+      setSearchQuery('');
+    }
+  };
+
   return (
     <>
       <div>
@@ -35,6 +47,19 @@ const NavBar = () => {
                   <Link className="nav-link" to="/Entertainment">Entertainment</Link>
                 </li>
               </ul>
+
+              <form className="d-flex" role="search" onSubmit={handleSearch}>
+                <input
+                  className="form-control me-2"
+                  type="search"
+                  placeholder="Search news..."
+                  aria-label="Search"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  style={{ minWidth: '200px' }}
+                />
+                <button className="btn btn-outline-light" type="submit">Search</button>
+              </form>
             </div>
           </div>
         </nav>
