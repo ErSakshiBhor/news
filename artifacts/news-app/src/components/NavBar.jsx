@@ -2,9 +2,8 @@ import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useBookmarks } from '../hooks/useBookmarks';
 import { useTheme } from '../hooks/useTheme';
-import { COUNTRIES } from '../hooks/useCountry';
 
-const NavBar = ({ country, setCountry, currentCountry }) => {
+const NavBar = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
   const { bookmarks } = useBookmarks();
@@ -47,55 +46,11 @@ const NavBar = ({ country, setCountry, currentCountry }) => {
             </li>
           </ul>
 
-          <div className="d-flex align-items-center gap-2 flex-wrap">
-            {/* Country selector */}
-            <div className="dropdown">
-              <button
-                className="btn btn-outline-light btn-sm dropdown-toggle d-flex align-items-center gap-1"
-                type="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-                style={{ fontSize: '0.85rem', whiteSpace: 'nowrap' }}
-              >
-                <span>{currentCountry.flag}</span>
-                <span className="d-none d-lg-inline">{currentCountry.name}</span>
-                <span className="d-inline d-lg-none">{currentCountry.code.toUpperCase()}</span>
-              </button>
-              <ul className="dropdown-menu dropdown-menu-end" style={{
-                background: isDark ? '#1e1e1e' : '#fff',
-                minWidth: '180px',
-              }}>
-                {COUNTRIES.map(c => (
-                  <li key={c.code}>
-                    <button
-                      className="dropdown-item d-flex align-items-center gap-2"
-                      onClick={() => setCountry(c.code)}
-                      style={{
-                        background: c.code === country ? (isDark ? '#333' : '#f0f0f0') : 'transparent',
-                        color: isDark ? '#e4e6eb' : '#212529',
-                        fontWeight: c.code === country ? 600 : 400,
-                        cursor: 'pointer',
-                        border: 'none',
-                        width: '100%',
-                        textAlign: 'left',
-                        padding: '6px 16px',
-                      }}
-                    >
-                      <span>{c.flag}</span>
-                      <span>{c.name}</span>
-                      {c.code === country && <span className="ms-auto" style={{ color: '#dc3545' }}>✓</span>}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Dark mode toggle */}
+          <div className="d-flex align-items-center gap-2">
             <button className="theme-toggle" onClick={toggleTheme} aria-label="Toggle dark mode">
               {isDark ? '☀️ Light' : '🌙 Dark'}
             </button>
 
-            {/* Search */}
             <form className="d-flex" role="search" onSubmit={handleSearch}>
               <input
                 className="form-control me-2"
@@ -104,7 +59,7 @@ const NavBar = ({ country, setCountry, currentCountry }) => {
                 aria-label="Search"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                style={{ minWidth: '160px' }}
+                style={{ minWidth: '180px' }}
               />
               <button className="btn btn-outline-light" type="submit">Search</button>
             </form>

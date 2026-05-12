@@ -7,29 +7,29 @@ import Bookmarks from './components/Bookmarks';
 import Ticker from './components/Ticker';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LoadingBar from "react-top-loading-bar";
-import { useCountry } from './hooks/useCountry';
+
+const COUNTRY = 'in';
 
 const App = () => {
   const pageSize = 10;
   const [progress, setProgress] = useState(0);
-  const { country, setCountry, currentCountry } = useCountry();
 
   return (
     <div>
       <Router>
-        <NavBar country={country} setCountry={setCountry} currentCountry={currentCountry} />
-        <Ticker country={country} />
+        <NavBar />
+        <Ticker country={COUNTRY} />
         <LoadingBar height={3} color="#f11946" progress={progress} />
         <Routes>
-          <Route path="/"            element={<News setProgress={setProgress} key={`Home-${country}`}          pageSize={pageSize} country={country} category="general"       />} />
-          <Route path="/Science"     element={<News setProgress={setProgress} key={`Science-${country}`}       pageSize={pageSize} country={country} category="science"       />} />
-          <Route path="/Business"    element={<News setProgress={setProgress} key={`Business-${country}`}      pageSize={pageSize} country={country} category="business"      />} />
-          <Route path="/Entertainment" element={<News setProgress={setProgress} key={`Entertainment-${country}`} pageSize={pageSize} country={country} category="entertainment" />} />
-          <Route path="/General"     element={<News setProgress={setProgress} key={`General-${country}`}       pageSize={pageSize} country={country} category="general"       />} />
-          <Route path="/Health"      element={<News setProgress={setProgress} key={`Health-${country}`}        pageSize={pageSize} country={country} category="health"        />} />
-          <Route path="/Sports"      element={<News setProgress={setProgress} key={`Sports-${country}`}        pageSize={pageSize} country={country} category="sports"        />} />
-          <Route path="/search"      element={<SearchResults setProgress={setProgress} />} />
-          <Route path="/bookmarks"   element={<Bookmarks />} />
+          <Route path="/"              element={<News setProgress={setProgress} key="Home"          pageSize={pageSize} country={COUNTRY} category="general"       />} />
+          <Route path="/Science"       element={<News setProgress={setProgress} key="Science"       pageSize={pageSize} country={COUNTRY} category="science"       />} />
+          <Route path="/Business"      element={<News setProgress={setProgress} key="Business"      pageSize={pageSize} country={COUNTRY} category="business"      />} />
+          <Route path="/Entertainment" element={<News setProgress={setProgress} key="Entertainment" pageSize={pageSize} country={COUNTRY} category="entertainment" />} />
+          <Route path="/General"       element={<News setProgress={setProgress} key="General"       pageSize={pageSize} country={COUNTRY} category="general"       />} />
+          <Route path="/Health"        element={<News setProgress={setProgress} key="Health"        pageSize={pageSize} country={COUNTRY} category="health"        />} />
+          <Route path="/Sports"        element={<News setProgress={setProgress} key="Sports"        pageSize={pageSize} country={COUNTRY} category="sports"        />} />
+          <Route path="/search"        element={<SearchResults setProgress={setProgress} />} />
+          <Route path="/bookmarks"     element={<Bookmarks />} />
         </Routes>
       </Router>
     </div>

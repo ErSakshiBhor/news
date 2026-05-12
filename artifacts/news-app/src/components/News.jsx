@@ -3,7 +3,6 @@ import NewsItem from './NewsItem';
 import Spinner from './Spinner';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useBookmarks } from '../hooks/useBookmarks';
-import { COUNTRIES } from '../hooks/useCountry';
 
 const News = (props) => {
   const [articles, setArticles] = useState([]);
@@ -12,8 +11,6 @@ const News = (props) => {
   const [page, setPage] = useState(1);
   const [totalResults, setTotalResults] = useState(0);
   const { isBookmarked, toggleBookmark } = useBookmarks();
-
-  const countryName = COUNTRIES.find(c => c.code === props.country)?.name || props.country.toUpperCase();
 
   const updateNews = async () => {
     props.setProgress(10);
@@ -45,7 +42,7 @@ const News = (props) => {
   useEffect(() => {
     updateNews();
     // eslint-disable-next-line
-  }, [props.category, props.country]);
+  }, [props.category]);
 
   const fetchMoreData = async () => {
     const nextPage = page + 1;
@@ -71,9 +68,6 @@ const News = (props) => {
       <h1 className="text-center" style={{ margin: '35px 0px', marginTop: '110px' }}>
         Top {categoryLabel} Headlines
       </h1>
-      <p className="text-center text-muted mb-4" style={{ marginTop: '-12px' }}>
-        {countryName}
-      </p>
 
       {loading && <Spinner />}
 
@@ -98,7 +92,7 @@ const News = (props) => {
             <div className="row">
               {articles.length === 0 ? (
                 <div className="col-12 text-center my-5">
-                  <p>No articles found for this category in {countryName}.</p>
+                  <p>No articles found for this category.</p>
                 </div>
               ) : (
                 articles.map((element) => (
@@ -125,7 +119,7 @@ const News = (props) => {
 };
 
 News.defaultProps = {
-  country: 'us',
+  country: 'in',
   pageSize: 8,
   category: 'general'
 };
